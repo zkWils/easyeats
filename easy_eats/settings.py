@@ -3,7 +3,9 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-easy-eats-local-development-key-change-in-prod'
+import os
+
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-local-development-key-only')
 
 DEBUG = True
 ALLOWED_HOSTS = ['*']
