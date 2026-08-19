@@ -75,7 +75,7 @@
                     {{ dish.description|truncatewords:12 }}
                 </p>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span class="card-price">₦{{ dish.price }}</span>
+                    <span class="card-price">${{ dish.price }}</span>
                     <a href="{% url 'add_to_cart' dish.id %}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.88rem;">
                         + Add to Cart
                     </a>
