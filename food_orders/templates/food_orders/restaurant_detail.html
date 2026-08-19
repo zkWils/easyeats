@@ -1,0 +1,36 @@
+{% extends 'food_orders/base.html' %}
+
+{% block title %}{{ restaurant.name }} | Easy Eats{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <a href="{% url 'home' %}" style="text-decoration: none; color: var(--primary); font-weight: 600;">← Back to Home</a>
+    <h1 style="font-size: 2.2rem; margin-top: 0.8rem;">{{ restaurant.name }}</h1>
+    <p style="color: var(--text-muted);">{{ restaurant.description }}</p>
+</div>
+
+<h2>Menu</h2>
+<div class="grid" style="margin-top: 1rem;">
+    {% for dish in dishes %}
+        <div class="card">
+            {% if dish.image %}
+                <img src="{{ dish.image.url }}" alt="{{ dish.name }}" class="card-img">
+            {% else %}
+                <div class="card-img" style="display: flex; align-items: center; justify-content: center; color: #aaa;">No Image</div>
+            {% endif %}
+            <div class="card-body">
+                <h3 class="card-title">{{ dish.name }}</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.8rem;">
+                    {{ dish.category.name }}
+                </p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="card-price">${{ dish.price }}</span>
+                    <a href="{% url 'add_to_cart' dish.id %}" class="btn">Add to Cart</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>This restaurant has no available dishes at the moment.</p>
+    {% endfor %}
+</div>
+{% endblock %}

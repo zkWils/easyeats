@@ -1,0 +1,37 @@
+{% extends 'food_orders/base.html' %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 2rem auto; padding: 0 1rem;">
+    <h2 style="color: #6b1d2f; margin-bottom: 1.5rem;">My Reservations</h2>
+
+    {% if reservations %}
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            {% for res in reservations %}
+                <div style="background: #ffffff; padding: 1.25rem; border-radius: 15px; border: 1px solid #efe8e1; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; justify-content: space-between; align-items: center; wrap: flex-wrap; gap: 1rem;">
+                    <div>
+                        <h3 style="margin: 0 0 0.5rem 0; color: #333;">{{ res.restaurant.name }}</h3>
+                        <p style="margin: 0 0 0.25rem 0; color: #666; font-size: 0.9rem;">
+                            <strong>Reserved For:</strong> {{ res.reservation_datetime|date:"M d, Y @ h:i A" }}
+                        </p>
+                        <p style="margin: 0; color: #888; font-size: 0.85rem;">
+                            Table {{ res.table.table_number }} • Seat {{ res.seat_number }}
+                        </p>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="background: #6b1d2f; color: #fff; padding: 4px 12px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; display: inline-block; margin-bottom: 0.5rem;">
+                            {{ res.get_status_display }}
+                        </span>
+                        <br>
+                        <a href="{% url 'reservation_detail' res.id %}" style="color: #6b1d2f; font-weight: 600; text-decoration: none; font-size: 0.9rem;">View Booking &rarr;</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div style="text-align: center; padding: 3rem; background: #ffffff; border-radius: 15px; border: 1px solid #efe8e1;">
+            <p style="color: #666; margin-bottom: 1rem;">You haven't made any table reservations yet.</p>
+            <a href="{% url 'home' %}" class="btn-pill-primary" style="text-decoration: none; display: inline-block;">Find a Restaurant</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

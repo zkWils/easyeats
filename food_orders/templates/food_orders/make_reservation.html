@@ -1,0 +1,67 @@
+{% extends 'food_orders/base.html' %}
+
+{% block title %}Reserve Table | {{ restaurant.name }}{% endblock %}
+
+{% block content %}
+<div class="auth-container" style="max-width: 580px; margin: 2.5rem auto;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <span style="background: rgba(107, 29, 47, 0.08); color: #6b1d2f; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">
+            Table Booking
+        </span>
+        <h2 style="color: #6b1d2f; margin: 0.8rem 0 0.3rem 0; font-size: 1.8rem;">{{ restaurant.name }}</h2>
+        <p style="color: #666; font-size: 0.95rem; margin: 0;">Select your table, seat, and preferred date/time below.</p>
+    </div>
+
+    <form method="POST" class="auth-form">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="full_name">Full Name</label>
+            <input type="text" id="full_name" name="full_name" placeholder="e.g. John Doe" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone_number">Phone Number</label>
+            <input type="tel" id="phone_number" name="phone_number" placeholder="e.g. +234 801 234 5678" required>
+        </div>
+
+        <div class="form-group">
+            <label for="reservation_datetime">Date & Time</label>
+            <input type="datetime-local" id="reservation_datetime" name="reservation_datetime" style="padding: 0.8rem 1.25rem; border-radius: 50px; border: 1.5px solid #e0d5cb; outline: none; width: 100%; box-sizing: border-box;" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+                <label for="table_id">Select Table</label>
+                <select name="table_id" id="table_id" style="width: 100%; padding: 0.8rem 1.25rem; border: 1.5px solid #e0d5cb; border-radius: 50px; outline: none; background: #fff; cursor: pointer;" required>
+                    {% for table in tables %}
+                        <option value="{{ table.id }}">Table {{ table.table_number }} ({{ table.capacity }} Seats)</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="seat_number">Select Seat</label>
+                <select name="seat_number" id="seat_number" style="width: 100%; padding: 0.8rem 1.25rem; border: 1.5px solid #e0d5cb; border-radius: 50px; outline: none; background: #fff; cursor: pointer;" required>
+                    <option value="1">Seat 1</option>
+                    <option value="2">Seat 2</option>
+                    <option value="3">Seat 3</option>
+                    <option value="4">Seat 4</option>
+                </select>
+            </div>
+        </div>
+
+        {% if cart and cart.items.exists %}
+            <div style="background: #fdfaf7; padding: 1.1rem 1.25rem; border-radius: 16px; margin: 1.2rem 0; border: 1px dashed #6b1d2f; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <strong style="color: #6b1d2f; display: block; font-size: 0.95rem;">Pre-ordered Meals Attached</strong>
+                    <span style="color: #666; font-size: 0.85rem;">{{ cart.total_items }} item(s) in your active cart</span>
+                </div>
+                <span style="font-weight: 700; color: #6b1d2f; font-size: 1.05rem;">₦{{ cart.total_price }}</span>
+            </div>
+        {% endif %}
+
+        <button type="submit" class="btn-pill-primary btn-full" style="margin-top: 1.2rem; padding: 0.9rem; font-size: 1rem;">Confirm Reservation</button>
+    </form>
+</div>
+{% endblock %}

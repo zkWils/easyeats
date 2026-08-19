@@ -1,0 +1,53 @@
+{% extends 'food_orders/base.html' %}
+
+{% block title %}Checkout | Easy Eats{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom: 1.5rem;">Delivery & Checkout 🚚</h1>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+    <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <h2 style="margin-bottom: 1rem;">Shipping Information</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Full Name</label>
+                <input type="text" name="full_name" value="{{ initial_data.full_name|default:'' }}" required 
+                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px;">
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Phone Number</label>
+                <input type="tel" name="phone_number" value="{{ initial_data.phone_number|default:'' }}" required 
+                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px;">
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Delivery Address</label>
+                <textarea name="delivery_address" rows="4" required 
+                          style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px;">{{ initial_data.delivery_address|default:'' }}</textarea>
+            </div>
+
+            <button type="submit" class="btn" style="width: 100%; padding: 0.8rem; font-size: 1.1rem;">Place Order Now</button>
+        </form>
+    </div>
+
+    <div style="background: white; padding: 1.5rem; border-radius: 10px; height: fit-content; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <h3>Order Summary</h3>
+        <hr style="margin: 0.8rem 0; border: none; border-top: 1px solid var(--border-color);">
+        
+        {% for item in cart.items.all %}
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.6rem; font-size: 0.95rem;">
+                <span>{{ item.quantity }}x {{ item.dish.name }}</span>
+                <span style="font-weight: 600;">${{ item.subtotal }}</span>
+            </div>
+        {% endfor %}
+
+        <hr style="margin: 1rem 0; border: none; border-top: 2px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 700;">
+            <span>Total:</span>
+            <span style="color: var(--primary);">${{ cart.total_price }}</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

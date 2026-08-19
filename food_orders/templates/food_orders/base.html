@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Easy Eats{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'food_orders/css/style.css' %}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="{% url 'home' %}" class="brand">🍔 EasyEats</a>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'my_orders' %}">My Orders</a></li>
+                <li><span>Hi, {{ user.username }}</span></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+                <li><a href="{% url 'register' %}">Register</a></li>
+            {% endif %}
+            <li><a href="{% url 'cart_detail' %}" class="btn">Cart ({{ cart_total_items }})</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="alert alert-{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+    <footer class="footer" id="about-us">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Easy Eats</h3>
+                <p>EasyEats is your premiere culinary hub connecting you to top local kitchens including Buka 9, El's Kitchen, and Imma Cuisine. Fresh flavors delivered fast to your doorstep.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact & Connect</h3>
+                <p><strong>WhatsApp:</strong> <a href="https://wa.me/2349134275860" target="_blank">09134275860</a></p>
+                <p><strong>Facebook:</strong> @Easyeats</p>
+                <p><strong>Instagram:</strong> @Easy_eats</p>
+                <p><strong>X (Twitter):</strong> @easyeats</p>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 2rem; font-size: 0.85rem; color: #777;">
+            &copy; 2026 EasyEats. All rights reserved.
+        </div>
+    </footer>
+</body>
+</html>

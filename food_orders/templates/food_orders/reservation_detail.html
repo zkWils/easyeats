@@ -1,0 +1,42 @@
+{% extends 'food_orders/base.html' %}
+
+{% block content %}
+<div class="auth-container" style="max-width: 650px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2 style="color: #6b1d2f; margin: 0;">Reservation #{{ reservation.id }}</h2>
+        <span class="badge" style="background: #6b1d2f; color: #fff; padding: 6px 14px; border-radius: 20px; font-weight: 600;">
+            {{ reservation.get_status_display }}
+        </span>
+    </div>
+
+    <!-- Details Grid -->
+    <div style="background: #fdfaf7; padding: 1.25rem; border-radius: 12px; border: 1px solid #efe8e1; margin-bottom: 1.5rem;">
+        <p><strong>Restaurant:</strong> {{ reservation.restaurant.name }} ({{ reservation.restaurant.get_location_display }})</p>
+        <p><strong>Reserved For:</strong> {{ reservation.reservation_datetime|date:"M d, Y @ h:i A" }}</p>
+        <p><strong>Booked At:</strong> {{ reservation.created_at|date:"M d, Y @ h:i A" }}</p>
+        <p><strong>Table & Seat:</strong> Table {{ reservation.table.table_number }} (Seat {{ reservation.seat_number }})</p>
+        <p><strong>Guest Name:</strong> {{ reservation.full_name }} ({{ reservation.phone_number }})</p>
+    </div>
+
+    <!-- Pre-ordered Meals -->
+    <h3 style="color: #4a3e3d; margin-bottom: 0.75rem;">Pre-ordered Meals</h3>
+    {% if reservation.items.all %}
+        <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem;">
+            {% for item in reservation.items.all %}
+                <li style="display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid #eee;">
+                    <span>{{ item.quantity }}x {{ item.dish.name }}</span>
+                    <strong>₦{{ item.total_price }}</strong>
+                </li>
+            {% endfor %}
+        </ul>
+        <div style="display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: bold; padding-top: 0.5rem;">
+            <span>Meal Total:</span>
+            <span style="color: #6b1d2f;">₦{{ reservation.total_meal_amount }}</span>
+        </div>
+    {% else %}
+        <p style="color: #888; font-style: italic;">No advance meals added to this reservation.</p>
+    {% endif %}
+
+    <a href="{% url 'home' %}" class="btn-pill-primary btn-full" style="display: inline-block; text-align: center; margin-top: 1.5rem; text-decoration: none;">Return Home</a>
+</div>
+{% endblock %}

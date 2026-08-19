@@ -1,0 +1,89 @@
+{% extends 'food_orders/base.html' %}
+
+{% block title %}Home | Easy Eats{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Delicious Food, Delivered Fast</h1>
+    <p>Explore top local restaurants and your favorite meals around you.</p>
+
+    <form action="{% url 'home' %}" method="GET" class="search-form">
+        <input 
+            type="text" 
+            name="q" 
+            value="{{ query|default:'' }}" 
+            placeholder="Search dishes or restaurants..." 
+            autocomplete="off"
+        >
+        <button type="submit" class="btn-pill-primary">Search</button>
+    </form>
+</section>
+
+{% if query %}
+    <div style="margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between;">
+        <p style="font-size: 1.2rem;">
+            Search results for: <strong>"{{ query }}"</strong>
+        </p>
+        <a href="{% url 'home' %}" style="color: var(--primary); font-weight: 600;">Clear search ✕</a>
+    </div>
+{% endif %}
+
+<h2 class="section-title">Featured Restaurants</h2>
+<div class="restaurant-grid">
+    {% for restaurant in restaurants %}
+        {% if restaurant.slug %}
+            <div class="restaurant-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <h3>{{ restaurant.name }}</h3>
+                    <p>{{ restaurant.description }}</p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                    <a href="{% url 'restaurant_detail' restaurant.slug %}" class="btn-pill-primary" style="text-decoration: none; font-size: 0.85rem; padding: 0.5rem 1rem;">View Menu</a>
+                    <a href="{% url 'make_reservation' restaurant.slug %}" style="border: 1.5px solid #6b1d2f; color: #6b1d2f; padding: 0.5rem 1rem; border-radius: 50px; text-decoration: none; font-size: 0.85rem; font-weight: 600;">Reserve Table</a>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<div class="category-pills">
+    <a href="{% url 'home' %}" class="pill {% if not selected_category %}active{% endif %}">All Meals</a>
+    {% for cat in categories %}
+        <a href="?category={{ cat.slug }}" class="pill {% if selected_category == cat.slug %}active{% endif %}">
+            {{ cat.name }}
+        </a>
+    {% endfor %}
+</div>
+
+<h2 class="section-title">Explore Dishes</h2>
+<div class="grid">
+    {% for dish in dishes %}
+        <div class="card">
+            {% if dish.image %}
+                <img src="{{ dish.image.url }}" alt="{{ dish.name }}" class="card-img">
+            {% else %}
+                <div class="card-img" style="display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.9rem;">
+                    No Image Uploaded
+                </div>
+            {% endif %}
+            <div class="card-body">
+                <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.2rem;">
+                    {{ dish.restaurant.name }}
+                </div>
+                <h3 class="card-title">{{ dish.name }}</h3>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1rem; line-height: 1.4;">
+                    {{ dish.description|truncatewords:12 }}
+                </p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="card-price">₦{{ dish.price }}</span>
+                    <a href="{% url 'add_to_cart' dish.id %}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.88rem;">
+                        + Add to Cart
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>No dishes found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

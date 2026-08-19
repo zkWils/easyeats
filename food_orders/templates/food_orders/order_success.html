@@ -1,0 +1,20 @@
+{% extends 'food_orders/base.html' %}
+
+{% block title %}Order Confirmed | Easy Eats{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 3rem auto; background: white; padding: 2.5rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="font-size: 3rem; margin-bottom: 0.5rem;">🎉</div>
+    <h1 style="color: #2ed573; margin-bottom: 0.5rem;">Order Placed Successfully!</h1>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Order ID: <strong>#{{ order.id }}</strong></p>
+
+    <div style="text-align: left; background: var(--bg-color); padding: 1.25rem; border-radius: 8px; margin-bottom: 1.5rem;">
+        <p><strong>Deliver To:</strong> {{ order.full_name }}</p>
+        <p><strong>Phone:</strong> {{ order.phone_number }}</p>
+        <p><strong>Address:</strong> {{ order.delivery_address }}</p>
+        <p style="margin-top: 0.5rem;"><strong>Total Paid:</strong> <span style="color: var(--primary); font-weight: 700;">${{ order.total_amount }}</span></p>
+    </div>
+
+    <a href="{% url 'home' %}" class="btn" style="padding: 0.75rem 2rem;">Back to Home</a>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'food_orders/base.html' %}
+
+{% block title %}My Orders | Easy Eats{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom: 1.5rem;">Order History</h1>
+
+{% if orders %}
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        {% for order in orders %}
+            <div style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem; margin-bottom: 0.8rem;">
+                    <div>
+                        <h3>Order #{{ order.id }}</h3>
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">{{ order.created_at|date:"M d, Y - H:i" }}</span>
+                    </div>
+                    <span style="padding: 0.3rem 0.8rem; border-radius: 12px; font-weight: 600; background: #eccc68; color: #333;">
+                        {{ order.get_status_display }}
+                    </span>
+                </div>
+                
+                <ul style="list-style: none; margin-bottom: 0.8rem;">
+                    {% for item in order.items.all %}
+                        <li style="display: flex; justify-content: space-between; font-size: 0.95rem; padding: 0.2rem 0;">
+                            <span>{{ item.quantity }}x {{ item.dish.name }}</span>
+                            <span>${{ item.price }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+                
+                <div style="text-align: right; font-size: 1.1rem; font-weight: 700;">
+                    Total: <span style="color: var(--primary);">${{ order.total_amount }}</span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>You haven't placed any orders yet.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'food_orders/base.html' %}
+
+{% block title %}Your Cart | Easy Eats{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom: 1.5rem;">Your Food Cart 🛒</h1>
+
+{% if cart.items.all %}
+    <div style="background: white; border-radius: 10px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 2px solid var(--border-color); text-align: left;">
+                    <th style="padding: 0.8rem;">Dish</th>
+                    <th style="padding: 0.8rem;">Price</th>
+                    <th style="padding: 0.8rem;">Quantity</th>
+                    <th style="padding: 0.8rem;">Subtotal</th>
+                    <th style="padding: 0.8rem;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart.items.all %}
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 0.8rem; font-weight: 600;">{{ item.dish.name }}</td>
+                        <td style="padding: 0.8rem;">${{ item.dish.price }}</td>
+                        <td style="padding: 0.8rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <a href="{% url 'update_cart_quantity' item.id 'decrease' %}" 
+                                style="background: #e2e8f0; text-decoration: none; color: #333; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; font-weight: bold;">-</a>
+                                
+                                <span style="font-weight: 600; min-width: 20px; text-align: center;">{{ item.quantity }}</span>
+                                
+                                <a href="{% url 'update_cart_quantity' item.id 'increase' %}" 
+                                style="background: #e2e8f0; text-decoration: none; color: #333; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; font-weight: bold;">+</a>
+                            </div>
+                        </td>
+                        <td style="padding: 0.8rem; font-weight: 600; color: var(--primary);">${{ item.subtotal }}</td>
+                        <td style="padding: 0.8rem;">
+                            <a href="{% url 'remove_from_cart' item.id %}" style="color: #e74c3c; text-decoration: none; font-weight: 500;">Remove</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div style="margin-top: 2rem; display: flex; justify-content: space-between; align-items: center;">
+            <h3>Total: <span style="color: var(--primary);">${{ cart.total_price }}</span></h3>
+            <a href="{% url 'checkout' %}" class="btn" style="padding: 0.8rem 2rem; font-size: 1.1rem;">Proceed to Checkout →</a>
+        </div>
+    </div>
+{% else %}
+    <div style="text-align: center; padding: 3rem; background: white; border-radius: 10px;">
+        <p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 1rem;">Your cart is currently empty.</p>
+        <a href="{% url 'home' %}" class="btn">Browse Dishes</a>
+    </div>
+{% endif %}
+{% endblock %}
